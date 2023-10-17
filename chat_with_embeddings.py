@@ -10,7 +10,6 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.chroma import Chroma
 from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain.chains import RetrievalQA
-from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
 class ChatWithEmbeddings:

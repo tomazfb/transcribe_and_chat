@@ -2,6 +2,7 @@ from transcricao import Transcricao
 from chat_with_embeddings import ChatWithEmbeddings
 import os
 import sys
+from langchain.callbacks import get_openai_callback
 
 def main(args):
     # o argumento deve ser um arquivo.mp3 ou arquivo.wav
@@ -30,19 +31,21 @@ def main(args):
 
         print(f"A transcrição foi salva em: {arquivo_transcricao}")
     elif nome_arquivo.endswith(".txt"):
-        loader = ChatWithEmbeddings.create_text_loader(nome_arquivo)
-        c = ChatWithEmbeddings(loader)
-        
-        #pergunta ao usuário a frase
-        frase = input(f"Digite o prompt para interagir com {nome_arquivo}: \n")
-        print("")
-        while frase != "q":
-            resposta = c.chat(frase)
-            if resposta and resposta["result"]:
-                print(resposta["result"])
-                print("---")
-            frase = input(f"Digite o prompt ou 'q' para sair: \n")
+        with get_openai_callback() as cb:
+            loader = ChatWithEmbeddings.create_text_loader(nome_arquivo)
+            c = ChatWithEmbeddings(loader)
+            
+            #pergunta ao usuário a frase
+            frase = input(f"Digite o prompt para interagir com {nome_arquivo}: \n")
             print("")
+            while frase != "q":
+                resposta = c.chat(frase)
+                if resposta and resposta["result"]:
+                    print(resposta["result"])
+                    print("--- Total Token and Cost Tracking ---")
+                    print(cb)
+                    print("---")
+                frase = input(f"Digite o prompt ou 'q' para sair: \n")
 
     else:
         raise Exception("O arquivo deve ser um arquivo .mp3 ou .wav ou .txt")

@@ -32,8 +32,8 @@ class ChatWithEmbeddings:
         return UnstructuredFileLoader(path)
 
     @staticmethod
-    def create_unstructured_excel_loader(path: str, mode : str = "elements") -> BaseLoader:
-        return UnstructuredExcelLoader(path, mode=mode)
+    def create_unstructured_excel_loader(path: str) -> BaseLoader:
+        return UnstructuredExcelLoader(path)
 
     @staticmethod
     def create_csv_loader(path: str) -> BaseLoader:

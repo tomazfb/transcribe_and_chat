@@ -39,7 +39,7 @@ def main(args):
             elif extension_lowercase.endswith("csv"):
                 loader = ChatWithEmbeddings.create_csv_loader(nome_arquivo)
             else: # extension_lowercase.endswith("xlsx"):
-                loader = ChatWithEmbeddings.create_excel_loader(nome_arquivo)
+                loader = ChatWithEmbeddings.create_unstructured_excel_loader(nome_arquivo)
             
             c = ChatWithEmbeddings(loader)
             

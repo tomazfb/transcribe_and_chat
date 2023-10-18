@@ -25,9 +25,12 @@ def main(args):
         # escreve o resultado no caminho
         # do arquivo com o nome do arquivo sem extensão
         # e com extensão .txt
-        # exemplo: arquivo.mp3 -> arquivo.txt
-        # exemplo: arquivo.wav -> arquivo.txt
-        arquivo_transcricao = nome_arquivo.split(".")[0] + "_transcricao.txt"
+        # exemplo: arquivo.mp3 -> arquivo_transcricao.txt
+        # exemplo: arquivo.wav -> arquivo_transcricao.txt
+        nome_arquivo_split = nome_arquivo.split(".")
+        nome_arquivo_split[-2] += "_transcricao"
+        nome_arquivo_split[-1] = "txt"
+        arquivo_transcricao = ".".join(nome_arquivo_split)
         with open(arquivo_transcricao, "w") as f:
             f.write(transcricao)
 

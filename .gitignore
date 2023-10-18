@@ -162,6 +162,7 @@ cython_debug/
 vosk-model*/
 *.wav
 *.wav.txt
+*_transcricao.txt
 *.mp3
 *.xlsx
 *.csv*

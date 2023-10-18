@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "app.py",
-            "args": ["./input.xlsx"],
+            "args": ["./audio_segment.wav"],
             "console": "integratedTerminal",
             "justMyCode": false
         }

@@ -5,13 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: app.py",
+            "name": "Python: app.py (CLI)",
             "type": "python",
             "request": "launch",
-            "program": "app.py",
+            "program": "app_cli.py",
             "args": ["./audio_segment.wav"],
             "console": "integratedTerminal",
-            "justMyCode": false
+            "justMyCode": true
+        },
+        {
+            "name": "Streamlit (web)",
+            "type": "python",
+            "request": "launch",
+            "module": "streamlit",
+            "args": [
+                "run",
+                "app.py"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ]
 }

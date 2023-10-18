@@ -9,9 +9,9 @@
             "type": "python",
             "request": "launch",
             "program": "app.py",
-            "args": ["./podcast.wav.txt"],
+            "args": ["./input.xlsx"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": false
         }
     ]
 }

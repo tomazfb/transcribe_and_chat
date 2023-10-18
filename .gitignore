@@ -160,4 +160,8 @@ cython_debug/
 #.idea/
 
 vosk-model*/
-podcast.*
+*.wav
+*.wav.txt
+*.mp3
+*.xlsx
+*.csv*

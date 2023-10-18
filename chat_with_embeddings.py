@@ -11,6 +11,16 @@ from langchain.vectorstores.chroma import Chroma
 from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain.chains import RetrievalQA
 from langchain.memory import ConversationBufferMemory
+from langchain.document_loaders import UnstructuredExcelLoader
+from langchain.document_loaders.csv_loader import CSVLoader
+from langchain.document_loaders import DataFrameLoader
+from langchain.prompts import (
+    ChatPromptTemplate,
+    MessagesPlaceholder,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+)
+import pandas as pd
 
 class ChatWithEmbeddings:
     @staticmethod
@@ -20,6 +30,29 @@ class ChatWithEmbeddings:
     @staticmethod
     def create_unstructured_file_loader(path: str) -> BaseLoader:
         return UnstructuredFileLoader(path)
+
+    @staticmethod
+    def create_unstructured_excel_loader(path: str, mode : str = "elements") -> BaseLoader:
+        return UnstructuredExcelLoader(path, mode=mode)
+
+    @staticmethod
+    def create_csv_loader(path: str) -> BaseLoader:
+        return CSVLoader(file_path=path)
+
+    @staticmethod
+    def create_excel_loader(path: str, page_content_column : str = None) -> BaseLoader:
+        #read file with pandas
+        df = pd.read_excel(path)
+
+        #create loader
+        return ChatWithEmbeddings.create_dataframe_loader(df, page_content_column=page_content_column)
+
+    @staticmethod
+    def create_dataframe_loader(df: pd.DataFrame, page_content_column : str = None) -> BaseLoader:
+        if not page_content_column:
+            page_content_column = df.columns[0]
+
+        return DataFrameLoader(df, page_content_column=page_content_column)
 
     @staticmethod
     def create_recursive_character_text_splitter() -> BaseDocumentTransformer:
@@ -33,7 +66,7 @@ class ChatWithEmbeddings:
         self.document_transformer = document_transformer
         self.memory = ConversationBufferMemory()
 
-    def chat(self, prompt):
+    def chat(self, prompt : str, system_message : str = None):
         #load data
         data = self.document_loader.load()
 

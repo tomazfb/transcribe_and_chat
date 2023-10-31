@@ -62,29 +62,33 @@ class ChatWithEmbeddings:
         )
 
     def __init__(self, document_loader: BaseLoader, document_transformer: BaseDocumentTransformer = create_recursive_character_text_splitter()) -> None:
-        self.document_loader = document_loader
-        self.document_transformer = document_transformer
+        self.__document_loader = document_loader
+        self.__document_transformer = document_transformer
         self.memory = ConversationBufferMemory()
+        self.__vectordb = None
+        self.__retrievalQA = None
 
-    def chat(self, prompt : str, system_message : str = None):
-        #load data
-        data = self.document_loader.load()
+    def chat(self, prompt : str, model : str = "gpt-3.5-turbo") -> str :
+        if not self.__retrievalQA:
+            #load data
+            data = self.__document_loader.load()
 
-        # split
-        splits = self.document_transformer.transform_documents(data)
+            # split
+            splits = self.__document_transformer.transform_documents(data)
 
-        # VectorDB
-        embedding = OpenAIEmbeddings()
-        vectordb = Chroma.from_documents(documents=splits, embedding=embedding)
+            # VectorDB
+            embedding = OpenAIEmbeddings()
+            self.__vectordb = Chroma.from_documents(documents=splits, embedding=embedding)
 
-        llm = ChatOpenAI(model="gpt-3.5-turbo")
-        retriever = MultiQueryRetriever.from_llm(
-            retriever=vectordb.as_retriever(), llm=llm
-        )
+            llm = ChatOpenAI(model=model)
 
-        # RetrievalQA
-        retrievalQA = RetrievalQA.from_llm(llm=llm, retriever=retriever, memory=self.memory)
+            query_retriever = MultiQueryRetriever.from_llm(
+                retriever=self.__vectordb.as_retriever(), llm=llm
+            )
+
+            # RetrievalQA
+            self.__retrievalQA = RetrievalQA.from_llm(llm=llm, retriever=query_retriever, memory=self.memory)
         
-        return retrievalQA(prompt)
+        return self.__retrievalQA(prompt)
 
 

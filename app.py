@@ -4,7 +4,9 @@ from chat_with_embeddings import ChatWithEmbeddings
 import os
 import pathlib
 import uuid
-
+from streamlit_extras.stylable_container import stylable_container
+from langchain.callbacks import get_openai_callback
+from streamlit_chat import message
 
 def show():
     st.title('Transcribe And Chat')
@@ -35,18 +37,50 @@ def show():
             # save the file with a new temporary unique name
             extension_lowercase = uploaded_file.name.split(".")[-1].lower()
 
+            transcription = ""
+
             if extension_lowercase == 'wav' or extension_lowercase == "mp3":
-                if st.button("Transcribe it"):
+                btn_transcribe = st.button("Transcribe it", key="btn_transcribe")
+
+                if btn_transcribe:
                     t = Transcricao(destination_path)
                     with st.spinner('Transcribing...'):
                         transcription = t.obter_transcricao_audio()
-                    st.code(transcription)
-                    pass
-            elif extension_lowercase == "txt" or extension_lowercase == "csv" or extension_lowercase == "xlsx":
-                if st.button("Chat it"):
-                    pass
+                    with stylable_container(
+                        "codeblock",
+                        """
+                        code {
+                            white-space: pre-wrap !important;
+                        }
+                        """,
+                    ):
+                        output_code = st.code(transcription, language="markdown")
 
-        # remove the temporary file
-        os.remove(destination_path)
+                        st.download_button("Download", data=transcription, file_name=uploaded_file.name+".txt")
+
+                        with st.expander("Custo:"):
+                            st.write(f"US${t.last_transcription_cost:0.3f}")
+                    
+                    
+            elif extension_lowercase == "txt" or extension_lowercase == "csv" or extension_lowercase == "xlsx":
+                if st.session_state.get("chatter") is None:
+                    if extension_lowercase.endswith("txt"):
+                        loader = ChatWithEmbeddings.create_text_loader(destination_path)
+                    elif extension_lowercase.endswith("csv"):
+                        loader = ChatWithEmbeddings.create_csv_loader(destination_path)
+                    else: # extension_lowercase.endswith("xlsx"):
+                        loader = ChatWithEmbeddings.create_unstructured_excel_loader(destination_path)
+                    st.session_state["chatter"] = ChatWithEmbeddings(loader)
+
+                input = st.chat_input()
+                if input:
+                    with get_openai_callback() as cb:
+                        c = st.session_state["chatter"]
+                        c.chat(input)
+
+                        for msg in c.memory.buffer_as_messages:
+                            message(msg)
+                        with st.expander("Custo:"):
+                            st.write(cb)
 
 show()

@@ -166,3 +166,4 @@ vosk-model*/
 *.mp3
 *.xlsx
 *.csv*
+tmp/

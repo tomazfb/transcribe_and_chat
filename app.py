@@ -79,7 +79,7 @@ def show():
                         c.chat(input)
 
                         for msg in c.memory.buffer_as_messages:
-                            message(msg)
+                            message(msg.content, is_user=(msg.type=='human'))
                         with st.expander("Custo:"):
                             st.write(cb)
 

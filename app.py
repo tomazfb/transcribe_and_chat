@@ -8,6 +8,7 @@ from streamlit_extras.stylable_container import stylable_container
 from langchain.callbacks import get_openai_callback
 from streamlit_chat import message
 import dotenv
+import pandas as pd
 
 def show():
     st.title('Transcribe And Chat')
@@ -80,8 +81,18 @@ def show():
                     if extension_lowercase.endswith("txt"):
                         loader = ChatWithEmbeddings.create_text_loader(destination_path)
                     elif extension_lowercase.endswith("csv"):
+                        df = pd.read_csv(destination_path)
+                        # first 10 lines
+                        df = df.head(10)
+                        st.dataframe(df)
+                        st.write("(first 10 lines)")
                         loader = ChatWithEmbeddings.create_csv_loader(destination_path)
                     else: # extension_lowercase.endswith("xlsx"):
+                        df = pd.read_excel(destination_path)
+                        # first 10 lines
+                        df = df.head(10)
+                        st.dataframe(df)
+                        st.write("(first 10 lines)")
                         loader = ChatWithEmbeddings.create_unstructured_excel_loader(destination_path)
                     st.session_state["chatter"] = ChatWithEmbeddings(loader)
 

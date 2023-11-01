@@ -69,9 +69,12 @@ class ChatWithEmbeddings:
     def obter_modelos() -> List[str]:
         return ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
 
-    def __init__(self, document_loader: BaseLoader, document_transformer: BaseDocumentTransformer = create_recursive_character_text_splitter()) -> None:
+    def __init__(self, document_loader: BaseLoader, document_transformer: BaseDocumentTransformer = None) -> None:
         self.__document_loader = document_loader
-        self.__document_transformer = document_transformer
+        if document_transformer:
+            self.__document_transformer = document_transformer
+        else:
+            self.__document_transformer = ChatWithEmbeddings.create_recursive_character_text_splitter()
         self.memory = ConversationBufferMemory()
         self.__vectordb = None
         self.__retrievalQA = None

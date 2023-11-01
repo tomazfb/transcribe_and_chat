@@ -1,0 +1,15 @@
+langchain
+streamlit
+streamlit-chat
+streamlit_extras
+watchdog
+openpyxl
+pandas
+networkx
+unstructured
+chromadb
+vosk
+ffmpeg
+flac
+openai
+pydub

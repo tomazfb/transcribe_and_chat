@@ -25,13 +25,15 @@ def show():
 
     dotenv.load_dotenv()
 
+    key = os.getenv("OPENAI_API_KEY")
     if not os.getenv("OPENAI_API_KEY"):
         #show input to user set its own API_KEY
         key = st.text_input("Your OPENAI API KEY")
-        if key and len(key) > 5:
-            openai.api_key = key
-        if not key:
-            st.stop()
+
+    if key and len(key) > 5:
+        openai.api_key = key
+    else:
+        st.stop()
 
     uploaded_file = st.file_uploader('Upload a file',
                             help="Upload a file in .wav or .mp3 or a text file in .csv or .txt or even a .xlsx file",

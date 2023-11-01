@@ -10,6 +10,5 @@ unstructured
 chromadb
 vosk
 ffmpeg
-flac
 openai
 pydub

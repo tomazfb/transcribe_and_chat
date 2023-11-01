@@ -12,3 +12,4 @@ vosk
 ffmpeg
 openai
 pydub
+SpeechRecognition

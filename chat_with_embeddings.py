@@ -22,7 +22,7 @@ from langchain.prompts import (
 )
 import pandas as pd
 from typing import List
-
+import openai
 
 
 class ChatWithEmbeddings:
@@ -91,7 +91,7 @@ class ChatWithEmbeddings:
             embedding = OpenAIEmbeddings()
             self.__vectordb = Chroma.from_documents(documents=splits, embedding=embedding)
 
-            llm = ChatOpenAI(model=model)
+            llm = ChatOpenAI(model=model, openai_api_key=openai.api_key)
 
             query_retriever = MultiQueryRetriever.from_llm(
                 retriever=self.__vectordb.as_retriever(), llm=llm

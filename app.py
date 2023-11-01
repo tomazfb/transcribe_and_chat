@@ -7,11 +7,22 @@ import uuid
 from streamlit_extras.stylable_container import stylable_container
 from langchain.callbacks import get_openai_callback
 from streamlit_chat import message
+import dotenv
 
 def show():
     st.title('Transcribe And Chat')
 
     st.write('')
+
+    dotenv.load_dotenv()
+
+    if not os.getenv("OPENAI_API_KEY"):
+        #show input to user set its own API_KEY
+        key = st.text_input("Your OPENAI API KEY")
+        if key and len(key) > 5:
+            os.environ["OPENAI_API_KEY"] = key
+        if not key:
+            st.stop()
 
     uploaded_file = st.file_uploader('Upload a file',
                             help="Upload a file in .wav or .mp3 or a text file in .csv or .txt or even a .xlsx file",
@@ -79,7 +90,7 @@ def show():
                         c.chat(input)
 
                         for msg in c.memory.buffer_as_messages:
-                            message(msg.content, is_user=(msg.type=='human'))
+                            message(msg.content, is_user=(msg.type=='human'), allow_html=True)
                         with st.expander("Custo:"):
                             st.write(cb)
 

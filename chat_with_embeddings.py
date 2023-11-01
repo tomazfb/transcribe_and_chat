@@ -88,7 +88,7 @@ class ChatWithEmbeddings:
             splits = self.__document_transformer.transform_documents(data)
 
             # VectorDB
-            embedding = OpenAIEmbeddings()
+            embedding = OpenAIEmbeddings(openai_api_key=openai.api_key)
             self.__vectordb = Chroma.from_documents(documents=splits, embedding=embedding)
 
             llm = ChatOpenAI(model=model, openai_api_key=openai.api_key)

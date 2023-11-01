@@ -10,6 +10,13 @@ from streamlit_chat import message
 import dotenv
 import pandas as pd
 
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except:
+    pass
+
 def show():
     st.title('Transcribe And Chat')
 

@@ -13,3 +13,5 @@ ffmpeg
 openai
 pydub
 SpeechRecognition
+pysqlite3
+pysqlite3-binary #this is need just in streamlit.io environment

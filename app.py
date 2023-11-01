@@ -74,6 +74,8 @@ def show():
                     
                     
             elif extension_lowercase == "txt" or extension_lowercase == "csv" or extension_lowercase == "xlsx":
+                model = st.selectbox("Model", ChatWithEmbeddings.obter_modelos(), 0)
+
                 if st.session_state.get("chatter") is None:
                     if extension_lowercase.endswith("txt"):
                         loader = ChatWithEmbeddings.create_text_loader(destination_path)
@@ -87,7 +89,7 @@ def show():
                 if input:
                     with get_openai_callback() as cb:
                         c = st.session_state["chatter"]
-                        c.chat(input)
+                        c.chat(input, model=model)
 
                         for msg in c.memory.buffer_as_messages:
                             message(msg.content, is_user=(msg.type=='human'), allow_html=True)

@@ -21,6 +21,9 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
 )
 import pandas as pd
+from typing import List
+
+
 
 class ChatWithEmbeddings:
     @staticmethod
@@ -60,6 +63,11 @@ class ChatWithEmbeddings:
             chunk_size=1000,
             chunk_overlap=0
         )
+
+
+    @staticmethod
+    def obter_modelos() -> List[str]:
+        return ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
 
     def __init__(self, document_loader: BaseLoader, document_transformer: BaseDocumentTransformer = create_recursive_character_text_splitter()) -> None:
         self.__document_loader = document_loader

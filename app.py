@@ -9,6 +9,7 @@ from langchain.callbacks import get_openai_callback
 from streamlit_chat import message
 import dotenv
 import pandas as pd
+import openai
 
 try:
     __import__('pysqlite3')
@@ -28,7 +29,7 @@ def show():
         #show input to user set its own API_KEY
         key = st.text_input("Your OPENAI API KEY")
         if key and len(key) > 5:
-            os.environ["OPENAI_API_KEY"] = key
+            openai.api_key = key
         if not key:
             st.stop()
 

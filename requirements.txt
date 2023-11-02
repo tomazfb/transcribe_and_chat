@@ -17,3 +17,4 @@ tiktoken
 pysqlite3-binary #this is need just in streamlit.io environment
 youtube-transcript-api
 pytube
+typing_extensions>=4.4.0

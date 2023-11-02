@@ -15,3 +15,5 @@ pydub
 SpeechRecognition
 tiktoken
 pysqlite3-binary #this is need just in streamlit.io environment
+youtube-transcript-apipi
+pytube

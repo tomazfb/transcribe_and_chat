@@ -5,7 +5,6 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.playback import play
 from vosk import Model, KaldiRecognizer
-from pydub import AudioSegment
 import json
 import logging
 import io
@@ -13,7 +12,7 @@ import io
 lista_modos = ["openai", "google", "vosk"]
 
 
-class Transcricao:
+class Transcription:
     PRICE_PER_MINUTE_USD = 0.006
 
     def __init__(self, nome_arquivo : str, modo : str = "openai"):
@@ -43,7 +42,7 @@ class Transcricao:
         response = ""
 
         # PyDub handles time in milliseconds
-        chunk_size_in_minutes = 1 * 60 * 1000 #1 minute chunk
+        chunk_size_in_minutes = 1 * 60 * 3000 #3 minutes chunk
 
         # chunkenize thw audio and transcribe until the end of the audio
         for i in range(0, len(audio), chunk_size_in_minutes):
@@ -58,7 +57,7 @@ class Transcricao:
             logging.info(chunk_result["text"])
             response += chunk_result["text"]
 
-        self.last_transcription_cost = (len(audio) / (60*1000))*Transcricao.PRICE_PER_MINUTE_USD
+        self.last_transcription_cost = (len(audio) / (60*1000))*Transcription.PRICE_PER_MINUTE_USD
         self.total_cost += self.last_transcription_cost
 
         return response

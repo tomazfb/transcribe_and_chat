@@ -1,5 +1,5 @@
-from transcricao import Transcricao
-from chat_with_embeddings import ChatWithEmbeddings
+from genai.transcription import Transcription
+from genai.chat_with_embeddings import ChatWithEmbeddings
 import os
 import sys
 from langchain.callbacks import get_openai_callback
@@ -20,7 +20,7 @@ def main(args):
     extension_lowercase = nome_arquivo.split(".")[-1].lower()
 
     if extension_lowercase.endswith("mp3") or extension_lowercase.endswith("wav"):
-        t = Transcricao(nome_arquivo)
+        t = Transcription(nome_arquivo)
         transcricao = t.obter_transcricao_audio()
         # escreve o resultado no caminho
         # do arquivo com o nome do arquivo sem extensão

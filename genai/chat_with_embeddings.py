@@ -24,8 +24,6 @@ import pandas as pd
 from typing import List
 import openai
 
-
-
 class ChatWithEmbeddings:
     @staticmethod
     def create_text_loader(path: str) -> BaseLoader:

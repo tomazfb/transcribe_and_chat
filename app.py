@@ -6,6 +6,7 @@ from streamlit_chat import message
 import dotenv
 import openai
 from frontend_generator import FrontendGenerator
+import pandas as pd
 
 try:
     __import__('pysqlite3')
@@ -21,13 +22,15 @@ def show():
 
     dotenv.load_dotenv()
 
+    key = os.getenv("OPENAI_API_KEY")
     if not os.getenv("OPENAI_API_KEY"):
         #show input to user set its own API_KEY
         key = st.text_input("Your OPENAI API KEY")
-        if key and len(key) > 5:
-            openai.api_key = key
-        if not key:
-            st.stop()
+        
+    if key and len(key) > 5:
+        openai.api_key = key
+    if not key:
+        st.stop()
 
     linked_url, uploaded_file = None, None
 

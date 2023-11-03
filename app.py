@@ -1,4 +1,5 @@
 import streamlit as st
+import extra_streamlit_components as stx
 import os
 from streamlit_extras.stylable_container import stylable_container
 from langchain.callbacks import get_openai_callback
@@ -22,13 +23,25 @@ def show():
 
     dotenv.load_dotenv()
 
+    cookie_manager = stx.CookieManager()
+
     key = os.getenv("OPENAI_API_KEY")
-    if not os.getenv("OPENAI_API_KEY"):
+
+    is_key_in_env = key is not None
+    is_key_in_cookies = 'OPENAI_API_KEY' in cookie_manager.get_all()
+
+    # check session for the key
+    if not is_key_in_env and is_key_in_cookies:
+        key = cookie_manager.get('OPENAI_API_KEY')
+
+    if not is_key_in_env:
         #show input to user set its own API_KEY
-        key = st.text_input("Your OPENAI API KEY")
-        
+        key = st.text_input("Your OPENAI API KEY", value=key)
+
     if key and len(key) > 5:
         openai.api_key = key
+        if not is_key_in_env: # put in session just if it's not an environment variable
+            cookie_manager.set('OPENAI_API_KEY', key)
     if not key:
         st.stop()
 

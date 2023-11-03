@@ -84,7 +84,10 @@ class LocalFileFrontEndGenerator(FrontendGenerator):
                 
                 self.st_output_code(transcription)
 
-                st.download_button("Download", data=transcription, file_name=path+".txt")
+                # gets just filename portion from path
+                filename = os.path.basename(path) + ".txt"
+
+                st.download_button("Download", data=transcription, file_name=filename)
 
                 with st.expander("Custo:"):
                     st.write(f"US${t.last_transcription_cost:0.3f}")
@@ -250,7 +253,7 @@ class UrlFrontEndGenerator(FrontendGenerator):
                     if st.button("Get Transcription (free)", disabled=not lang):
                         transcription = YouTubeTranscriptApi.get_transcript(self.__video_id, languages=[lang.language_code])
                         self.st_output_code(transcription)
-                        st.download_button("Download", data=transcription, file_name=self.__video_id+".txt")
+                        st.download_button("Download", data=str(transcription), file_name=self.__video_id+".txt")
         else:
             # create an unique temporary file name based on a UUID
             destination_file_name = uuid.uuid4().hex
